@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import { Button, Card, Typography } from '@mui/material';
+import { 
+  Button,
+  Card,
+  Typography,
+ } from '@mui/material';
 import { 
   ADD_PROPERTY_ACTION_TYPE, 
 } from '../constant/actionTypes';
@@ -11,7 +15,9 @@ const CardWrapper = styled(Card)({
   marginTop: 20,
 });
 
-const AgencyInfo = styled('div')(({color}) => ({
+const AgencyInfo = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'color'
+})(({color}) => ({
   backgroundColor: color,
 }));
 
@@ -39,7 +45,9 @@ const EmptyRow = styled('div')({
   height: 20,
 });
 
-const ActionButton = styled(Button)(({isAdd}) => ({
+const ActionButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'isAdd'
+})(({isAdd}) => ({
   color: isAdd ? '#05a153' : '#ff0000',
   backgroundColor: isAdd ? '#c4ffc4' : '#e9cdcd',
   textTransform: 'initial',
@@ -48,6 +56,7 @@ const ActionButton = styled(Button)(({isAdd}) => ({
 function PropertyCard({
   actionType,
   actionLabel,
+  actionOnClick,
   agency,
   mainImage,
   price,
@@ -58,10 +67,7 @@ function PropertyCard({
   return (
     <CardWrapper 
       id={propertyId} 
-      // onMouseOver={()=> setShowAction(true)}
-      // onMouseOut={()=> setShowAction(false)}
-
-      onMouseEnter={()=> setShowAction(true)}
+      onMouseOver={()=> setShowAction(true)}
       onMouseLeave={()=> setShowAction(false)}
     >
       <AgencyInfo color={agency.brandingColors.primary}>
@@ -75,6 +81,7 @@ function PropertyCard({
             variant='contained' 
             isAdd={actionType === ADD_PROPERTY_ACTION_TYPE}
             size='small'
+            onClick={() => actionOnClick(propertyId)}
           >
             {actionLabel}
           </ActionButton>
@@ -89,6 +96,7 @@ function PropertyCard({
 PropertyCard.propTypes = {
   actionType: PropTypes.string.isRequired,
   actionLabel: PropTypes.string.isRequired,
+  actionOnClick: PropTypes.func.isRequired,
   agency: PropTypes.shape({
     brandingColors: PropTypes.shape({
       primary: PropTypes.string.isRequired,
