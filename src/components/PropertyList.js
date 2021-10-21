@@ -17,19 +17,19 @@ const EmptyPlaceholder = styled(Typography)({
   alignItems: 'center',
 });
 
-
 function PropertyList({
   actionLabel,
   actionType,
   actionOnClick,
   data = [],
+  emptyMessage,
   title,
 }) {
   if (!data || data.length === 0) {
     return (
       <PropertyListWrapper>
         <Typography variant='h6'>{title}</Typography>
-        <EmptyPlaceholder variant='body1'>There are no properties in this column.</EmptyPlaceholder>
+        <EmptyPlaceholder variant='body1'>{emptyMessage}</EmptyPlaceholder>
       </PropertyListWrapper>
     );
   }
@@ -58,6 +58,7 @@ PropertyList.propTypes = {
   actionType: PropTypes.string.isRequired,
   actionOnClick: PropTypes.func.isRequired,
   data: PropTypes.array,
+  emptyMessage: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 

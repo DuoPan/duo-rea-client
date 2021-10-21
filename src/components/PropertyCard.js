@@ -7,12 +7,14 @@ import {
   Typography,
  } from '@mui/material';
 import { 
-  ADD_PROPERTY_ACTION_TYPE, 
+  ADD_PROPERTY_ACTION_TYPE,
+  REMOVE_PROPERTY_ACTION_TYPE,
 } from '../constant/actionTypes';
 
 const CardWrapper = styled(Card)({
   width: 320,
-  marginTop: 20,
+  marginTop: 10,
+  marginBottom: 10,
 });
 
 const AgencyInfo = styled('div', {
@@ -46,12 +48,22 @@ const EmptyRow = styled('div')({
 });
 
 const ActionButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== 'isAdd'
-})(({isAdd}) => ({
-  color: isAdd ? '#05a153' : '#ff0000',
-  backgroundColor: isAdd ? '#c4ffc4' : '#e9cdcd',
+  shouldForwardProp: (prop) => prop !== 'buttonColors'
+})(({buttonColors}) => ({
+  color: buttonColors.frontColor,
+  backgroundColor: buttonColors.backColor,
   textTransform: 'initial',
 }));
+
+const getButtonColors = (type) => {
+  if (type === ADD_PROPERTY_ACTION_TYPE) {
+    return {frontColor: '#05a153', backColor: '#c4ffc4'};
+  } else if (type === REMOVE_PROPERTY_ACTION_TYPE) {
+    return {frontColor: '#ff0000', backColor: '#e9cdcd'};
+  } else { // to support more action types.
+    return {frontColor: '#05a153', backColor: '#c4ffc4'}
+  }
+};
 
 function PropertyCard({
   actionType,
@@ -63,6 +75,7 @@ function PropertyCard({
   propertyId,
 }) {
   const [showAction, setShowAction] = useState(false);
+  const buttonColors = getButtonColors(actionType);
 
   return (
     <CardWrapper 
@@ -79,7 +92,7 @@ function PropertyCard({
         <ActionButtonWrapper>
           <ActionButton 
             variant='contained' 
-            isAdd={actionType === ADD_PROPERTY_ACTION_TYPE}
+            buttonColors={buttonColors}
             size='small'
             onClick={() => actionOnClick(propertyId)}
           >
